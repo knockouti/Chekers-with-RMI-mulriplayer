@@ -25,7 +25,7 @@ public class ChekersView extends JPanel {
                 image= ImageIO.read(new File("src\\Image\\redd.png"));
             }
             if(color == Color.white){
-                image = ImageIO.read(new File("src\\Image/\\whitee.png"));
+                image = ImageIO.read(new File("src\\Image\\whitee.png"));
             }
         }
         catch (IOException ex){

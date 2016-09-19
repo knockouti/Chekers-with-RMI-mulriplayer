@@ -13,7 +13,7 @@ public class MainFrame {
     public MainFrame() {
         mainFrame = new JFrame();
         board = new Board();
-        mainFrame.setPreferredSize(new Dimension(1000, 1000));
+        mainFrame.setPreferredSize(new Dimension(800, 800));
         mainFrame.setLayout(new BorderLayout());
         mainFrame.add(board.getMainPanel(), BorderLayout.CENTER);
         mainFrame.add(board.getHorizontalNumbPanel(), BorderLayout.PAGE_END);

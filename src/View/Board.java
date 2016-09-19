@@ -18,13 +18,14 @@ public class Board {
     private JPanel mainPanel;
     private List<Cell> blackButtons;
     private List<Cell> whiteButtons;
+    ChekersView chekersView;
 
     public Board() {
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(8, 8));
-
         this.getButtons();
         this.setPositionButtons();
+        this.setChekers();
     }
 
     public void setPositionButtons() {
@@ -52,6 +53,25 @@ public class Board {
 
     }
 
+    public void setChekers() {
+        for (int i = 0; i < 12; i++) {
+            chekersView = new ChekersView(Color.red);
+            chekersView.setColorChker();
+            chekersView.setAdress(blackButtons.get(i).getXAdress(),blackButtons.get(i).getYAdress());
+            blackButtons.get(i).setLayout(new GridBagLayout());
+            blackButtons.get(i).add(chekersView);
+        }
+        for (int i = 20; i < SIZE_FIELD / 2; i++) {
+            chekersView = new ChekersView(Color.white);
+            chekersView.setColorChker();
+            chekersView.setAdress(blackButtons.get(i).getXAdress(),blackButtons.get(i).getYAdress());
+            blackButtons.get(i).setLayout(new GridBagLayout());
+            blackButtons.get(i).add(chekersView);
+        }
+
+
+    }
+
     public void getButtons() {
         blackButtons = new ArrayList<>();
         int numbString = 1;
@@ -68,7 +88,6 @@ public class Board {
                     blackButtons.add(cell);
                     j++;
                 }
-
             }
             numbString++;
         }
@@ -81,13 +100,11 @@ public class Board {
     public JPanel getVerticalNubmPanel() {
         verticalNubmPanel = new JPanel();
         verticalNubmPanel.setLayout(new BoxLayout(verticalNubmPanel, BoxLayout.Y_AXIS));
-
-        verticalNubmPanel.add(Box.createRigidArea(new Dimension(0, 50)));
-
-        for (int i = 8; i > 0; i--) {
+        verticalNubmPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        for (int i = SIZE_STRING; i > 0; i--) {
             JLabel label = new JLabel(String.valueOf(i));
             verticalNubmPanel.add(label);
-            verticalNubmPanel.add(Box.createRigidArea(new Dimension(0, 100)));
+            verticalNubmPanel.add(Box.createRigidArea(new Dimension(0, 80)));
         }
         return verticalNubmPanel;
     }
@@ -95,11 +112,11 @@ public class Board {
     public JPanel getHorizontalNumbPanel() {
         horizontalNumbPanel = new JPanel();
         horizontalNumbPanel.setLayout(new BoxLayout(horizontalNumbPanel, BoxLayout.X_AXIS));
-        horizontalNumbPanel.add(Box.createRigidArea(new Dimension(50, 0)));
+        horizontalNumbPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         for (char i = 'A'; i <= 'H'; i++) {
             JLabel label = new JLabel(String.valueOf(i));
             horizontalNumbPanel.add(label);
-            horizontalNumbPanel.add(Box.createRigidArea(new Dimension(118, 0)));
+            horizontalNumbPanel.add(Box.createRigidArea(new Dimension(95, 0)));
         }
         return horizontalNumbPanel;
     }

@@ -14,28 +14,32 @@ public class Cell extends JPanel {
     char xAdress;
 
     boolean isEmpty;
-    public Cell(){
+
+    public Cell() {
         super();
 
     }
-    public Cell(int yAdress, char xAdress){
+
+    public Cell(int yAdress, char xAdress) {
         super();
         this.xAdress = xAdress;
         this.yAdress = yAdress;
         JLabel label = new JLabel("<html>Text color: <font color='red'>red</font></html>");
-        label.setText(String.valueOf(xAdress)+yAdress);
-        this.add(label);
-
+        label.setText(String.valueOf(xAdress) + yAdress);
         this.add(label);
         this.setBackground(Color.black);
-        this.setPreferredSize(new Dimension(100,100));
+        this.setPreferredSize(new Dimension(100, 100));
 
     }
 
-    public void setEmpty(boolean isEmpty){
+    public void setEmpty(boolean isEmpty) {
         this.isEmpty = isEmpty;
     }
-
-
+    public char getXAdress(){
+        return xAdress;
+    }
+    public int getYAdress(){
+        return yAdress;
+    }
 
 }

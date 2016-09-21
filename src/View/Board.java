@@ -1,9 +1,9 @@
 package View;
 
+import Controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
@@ -16,11 +16,14 @@ public class Board {
     private JPanel verticalNubmPanel;
     private JPanel horizontalNumbPanel;
     private JPanel mainPanel;
-    private List<Cell> blackButtons;
-    private List<Cell> whiteButtons;
+    private List<CellView> blackButtons;
+    private List<CellView> whiteButtons;
     ChekersView chekersView;
+    Controller controller;
 
-    public Board() {
+
+    public Board(Controller controller) {
+        this.controller = controller;
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(8, 8));
         this.getButtons();
@@ -31,9 +34,9 @@ public class Board {
     public void setPositionButtons() {
         whiteButtons = new ArrayList<>();
         for (int i = 0; i < SIZE_FIELD / 2; i++) {
-            Cell cell = new Cell();
-            cell.setBackground(Color.white);
-            whiteButtons.add(cell);
+            CellView cellView = new CellView();
+            cellView.setBackground(Color.white);
+            whiteButtons.add(cellView);
         }
 
         for (int i = 7; i >= 0; i--) {
@@ -57,20 +60,23 @@ public class Board {
         for (int i = 0; i < 12; i++) {
             chekersView = new ChekersView(Color.red);
             chekersView.setColorChker();
-            chekersView.setAdress(blackButtons.get(i).getXAdress(),blackButtons.get(i).getYAdress());
-            blackButtons.get(i).setLayout(new GridBagLayout());
-            blackButtons.get(i).add(chekersView);
+            CellView cellView = blackButtons.get(i);
+            controller.setAdressCheker(cellView.getYAdress(), cellView.getXAdress());
+            cellView.setLayout(new GridBagLayout());
+            cellView.add(chekersView);
         }
         for (int i = 20; i < SIZE_FIELD / 2; i++) {
             chekersView = new ChekersView(Color.white);
             chekersView.setColorChker();
-            chekersView.setAdress(blackButtons.get(i).getXAdress(),blackButtons.get(i).getYAdress());
-            blackButtons.get(i).setLayout(new GridBagLayout());
-            blackButtons.get(i).add(chekersView);
+            CellView cellView = blackButtons.get(i);
+            controller.setAdressCheker(cellView.getYAdress(), cellView.getXAdress());
+            cellView.setLayout(new GridBagLayout());
+            cellView.add(chekersView);
         }
 
 
     }
+
 
     public void getButtons() {
         blackButtons = new ArrayList<>();
@@ -78,14 +84,16 @@ public class Board {
         for (int i = 1; i <= SIZE_STRING; i++) {
             if (numbString % 2 == 0) {
                 for (char j = 'b'; j <= 'h'; j++) {
-                    Cell cell = new Cell(i, j);
-                    blackButtons.add(cell);
+                    CellView cellView = new CellView(i, j);
+                    controller.setAdressCell(i,j);
+                    blackButtons.add(cellView);
                     j++;
                 }
             } else {
                 for (char j = 'a'; j <= 'h'; j++) {
-                    Cell cell = new Cell(i, j);
-                    blackButtons.add(cell);
+                    CellView cellView = new CellView(i, j);
+                    controller.setAdressCell(i,j);
+                    blackButtons.add(cellView);
                     j++;
                 }
             }

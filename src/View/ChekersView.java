@@ -1,5 +1,7 @@
 package View;
 
+import Model.Cell;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +18,7 @@ public class ChekersView extends JPanel {
     BufferedImage image;
     BufferedImage imageRedCheker;
     JLabel labelImage;
-    char xAdress;
-    int yAdress;
+
     public ChekersView(Color color)  {
         super();
         try {
@@ -29,14 +30,11 @@ public class ChekersView extends JPanel {
             }
         }
         catch (IOException ex){
-
+            System.out.printf("File hasn't been");
         }
 
     }
-    public void setAdress(char xAdress, int yAdress){
-        this.xAdress = xAdress;
-        this.yAdress = yAdress;
-    }
+
 
     public void setColorChker(){
         labelImage = new JLabel(new ImageIcon(image));

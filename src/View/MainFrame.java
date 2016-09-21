@@ -1,5 +1,7 @@
 package View;
 
+import Controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,10 +11,12 @@ import java.awt.*;
 public class MainFrame {
     private JFrame mainFrame;
     private Board board;
+    Controller controller;
 
-    public MainFrame() {
+    public MainFrame(Board board) {
         mainFrame = new JFrame();
-        board = new Board();
+        this.board = board;
+
         mainFrame.setPreferredSize(new Dimension(800, 800));
         mainFrame.setLayout(new BorderLayout());
         mainFrame.add(board.getMainPanel(), BorderLayout.CENTER);
@@ -20,6 +24,7 @@ public class MainFrame {
         mainFrame.add(board.getHorizontalNumbPanel(), BorderLayout.PAGE_START);
         mainFrame.add(board.getVerticalNubmPanel(), BorderLayout.LINE_END);
         mainFrame.add(board.getVerticalNubmPanel(), BorderLayout.LINE_START);
+
         mainFrame.pack();
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);

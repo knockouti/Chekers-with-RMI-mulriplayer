@@ -16,7 +16,6 @@ public class MainFrame {
     public MainFrame(Board board) {
         mainFrame = new JFrame();
         this.board = board;
-
         mainFrame.setPreferredSize(new Dimension(800, 800));
         mainFrame.setLayout(new BorderLayout());
         mainFrame.add(board.getMainPanel(), BorderLayout.CENTER);
@@ -24,7 +23,6 @@ public class MainFrame {
         mainFrame.add(board.getHorizontalNumbPanel(), BorderLayout.PAGE_START);
         mainFrame.add(board.getVerticalNubmPanel(), BorderLayout.LINE_END);
         mainFrame.add(board.getVerticalNubmPanel(), BorderLayout.LINE_START);
-
         mainFrame.pack();
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);

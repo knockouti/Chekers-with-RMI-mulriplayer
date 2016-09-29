@@ -1,10 +1,16 @@
 package View;
 
+import Controller.Controller;
 import Model.Cell;
 
 import javax.imageio.ImageIO;
+import javax.naming.ldap.Control;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.font.GraphicAttribute;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,8 +25,12 @@ public class ChekersView extends JPanel {
     BufferedImage imageRedCheker;
     JLabel labelImage;
 
+
+
+
     public ChekersView(Color color)  {
         super();
+
         try {
             if(color == Color.red) {
                 image= ImageIO.read(new File("src\\Image\\redd.png"));
@@ -44,7 +54,6 @@ public class ChekersView extends JPanel {
         setMaximumSize(size);
         setSize(size);
         setLayout(null);
-        this.setBackground(Color.black);
         this.add(labelImage);
     }
     public void paintComponent(Graphics g) {
@@ -52,5 +61,6 @@ public class ChekersView extends JPanel {
         g.drawImage(image, 0, 0, null);
 
     }
+
 
 }

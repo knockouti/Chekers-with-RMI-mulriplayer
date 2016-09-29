@@ -2,6 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created by Igor on 20.09.2016.
@@ -15,6 +16,12 @@ public class ChekersAlgoritm {
     public int countX = 0;
     public int countY = 0;
     public int size = 0;
+    public Cell currentCell;
+
+    public List<Cell> getEightWay() {
+        return eightWay;
+    }
+
     private List<Cell> eightWay; //a1, b2, c3, d4, e5, f6, g7, h8 //«Большая дорога»
     private List<Cell> sevenWayG1A7; // g1, f2, e3, d4, c5, b6, a7 //Двойники
     private List<Cell> sevenWayH2B8; //h2, g3, f4, e5, d6, c7, b8
@@ -28,7 +35,10 @@ public class ChekersAlgoritm {
     private List<Cell> fourWayE1H4; //e1, f2, g3, h4
     private List<Cell> twoWayG1H2; //g1, h2
     private List<Cell> twoWayA7B8; //g1, h2
-
+    private int numberPlayer;
+    private List<Cell> borderCells;
+    private int leftCellDiagonal;
+    private int rightCellDiagonal;
     public ChekersAlgoritm() {
         blackButtons = new ArrayList<>();
         eightWay = new ArrayList<>();
@@ -46,8 +56,96 @@ public class ChekersAlgoritm {
         twoWayA7B8 = new ArrayList<>();
     }
 
+    public void setCurrentCell(char xAdress, int yAdress){
+        currentCell = new Cell(xAdress, yAdress);
+    }
     public List<Cell> getBlackButtons() {
         return blackButtons;
+    }
+
+    public void setBorderCells(){
+        for(Cell cell : blackButtons){
+            if(cell.getXAdress() == currentCell.getXAdress() && cell.getYAdress() == currentCell.getYAdress()){
+                borderCells = new ArrayList<>();
+                this.checkDiagonals(getEightWay(),cell);
+                this.checkDiagonals(getSevenWayG1A7(),cell);
+                this.checkDiagonals(getSevenWayH2B8(),cell);
+                this.checkDiagonals(getSixWayA3F8(),cell);
+                this.checkDiagonals(getSixWayC1H6(),cell);
+                this.checkDiagonals(getFiveWayE1A5(),cell);
+                this.checkDiagonals(getFiveWayH4D8(),cell);
+                this.checkDiagonals(getFourWayA5D8(),cell);
+                this.checkDiagonals(getFourWayE1H4(),cell);
+                this.checkDiagonals(getFreeWayC1A3(),cell);
+                this.checkDiagonals(getFreeWayH6F8(),cell);
+                this.checkDiagonals(getTwoWayA7B8(),cell);
+                this.checkDiagonals(getTwoWayG1H2(),cell);
+            }
+        }
+
+    }
+    public void clearDiagonal(){
+        {
+
+                this.clearCurrent(getEightWay());
+                this.clearCurrent(getSevenWayG1A7());
+                this.clearCurrent(getSevenWayH2B8());
+                this.clearCurrent(getSixWayA3F8());
+                this.clearCurrent(getSixWayC1H6());
+                this.clearCurrent(getFiveWayE1A5());
+                this.clearCurrent(getFiveWayH4D8());
+                this.clearCurrent(getFourWayA5D8());
+                this.clearCurrent(getFourWayE1H4());
+                this.clearCurrent(getFreeWayC1A3());
+                this.clearCurrent(getFreeWayH6F8());
+                this.clearCurrent(getTwoWayA7B8());
+                this.clearCurrent(getTwoWayG1H2());
+            }
+
+
+    }
+
+
+
+    public List<Cell> getBorderCells() {
+        return borderCells;
+    }
+
+    public void checkDiagonals(List<Cell> diagonal, Cell cell){
+        if(diagonal.contains(cell)){
+            int z =1;
+            if(diagonal.size() > (diagonal.indexOf(cell)+1) && (diagonal.get(diagonal.indexOf(cell)+1).color == 0)) {
+                borderCells.add(diagonal.get(diagonal.indexOf(cell) + 1));
+            }
+            if(z == 1) {
+                leftCellDiagonal = diagonal.indexOf(cell);
+                z++;
+            }
+            else {
+                rightCellDiagonal = diagonal.indexOf(cell);
+
+
+            }
+
+
+        }
+
+    }
+
+    public void clearCurrent(List<Cell> diagonal){
+        diagonal.get(leftCellDiagonal).setColorCell(0);
+
+        diagonal.get(leftCellDiagonal+1).setColorCell(1);
+//        for(Cell cell : blackButtons) {
+//            if(diagonal.get(leftCellDiagonal) == cell){
+//
+//
+//            }
+//            if(diagonal.get(rightCellDiagonal) == cell){
+//                cell.setColorCell(0);
+//            }
+//
+//        }
     }
 
     public List<Cell> getSevenWayG1A7() {
@@ -199,6 +297,7 @@ public class ChekersAlgoritm {
         }
         this.addWayToList(list, 3, 4);
     }
+
 
     public void setTwoWay(int chooseList, List<Cell> list) {
         if (chooseList == 1) {

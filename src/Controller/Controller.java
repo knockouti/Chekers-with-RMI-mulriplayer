@@ -50,14 +50,42 @@ public class Controller {
     public void setCurrentCellController(char xAdrss, int yAdress) {
         chekersAlgoritm.setCurrentCell(xAdrss, yAdress);
         chekersAlgoritm.setBorderCells();
+
     }
 
-    public void clearCurrentController() {
-        chekersAlgoritm.clearDiagonal();
+    public void setBooleanBear(boolean booleanBear) {
+        chekersAlgoritm.setBeat(booleanBear);
+    }
+
+    public List<Cell> getBearCellsController() {
+        return chekersAlgoritm.getBearCell();
+    }
+
+    public void setNumerPlayer(int numerPlayer) {
+        chekersAlgoritm.setNumberPlayer(numerPlayer);
     }
 
     public List<Cell> getBorderCellsForView() {
         return chekersAlgoritm.getBorderCells();
     }
 
+    public void changeDiagonalPlayer1(char countX, int countY, char oldCountX, int oldCountY) {
+        chekersAlgoritm.changeDiagonalPlayer1(countX, countY, oldCountX, oldCountY);
+    }
+
+    public void setBorderCellsController(List<Cell> borderCellsController){
+        chekersAlgoritm.setListBorderCells(borderCellsController);
+    }
+
+    public int getOppositeNumberPlayerForView() {
+        return chekersAlgoritm.getOppositeNumerPlayer();
+    }
+
+    public boolean getBooleanBear() {
+        return chekersAlgoritm.isBeat();
+    }
+
+    public int getNumberPlayerInModel() {
+        return chekersAlgoritm.getNumberPlayer();
+    }
 }

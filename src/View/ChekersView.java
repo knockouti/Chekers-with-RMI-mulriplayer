@@ -56,6 +56,7 @@ public class ChekersView extends JPanel {
         setLayout(null);
         this.add(labelImage);
     }
+
     public void paintComponent(Graphics g) {
 
         g.drawImage(image, 0, 0, null);

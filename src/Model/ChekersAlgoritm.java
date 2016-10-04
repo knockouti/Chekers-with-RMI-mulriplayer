@@ -2,7 +2,6 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Created by Igor on 20.09.2016.
@@ -35,10 +34,15 @@ public class ChekersAlgoritm {
     private List<Cell> fourWayE1H4; //e1, f2, g3, h4
     private List<Cell> twoWayG1H2; //g1, h2
     private List<Cell> twoWayA7B8; //g1, h2
-    private int numberPlayer;
+    private int numberPlayer = 1;
+    private int numerClick = 1;
+    private List<Cell> bearCell;
     private List<Cell> borderCells;
+    private List<List<Cell>> diagonalsWithCurrent;
+    private boolean beat;
     private int leftCellDiagonal;
     private int rightCellDiagonal;
+
     public ChekersAlgoritm() {
         blackButtons = new ArrayList<>();
         eightWay = new ArrayList<>();
@@ -56,97 +60,186 @@ public class ChekersAlgoritm {
         twoWayA7B8 = new ArrayList<>();
     }
 
-    public void setCurrentCell(char xAdress, int yAdress){
+    public void setCurrentCell(char xAdress, int yAdress) {
         currentCell = new Cell(xAdress, yAdress);
+        diagonalsWithCurrent = new ArrayList<>();
     }
+
     public List<Cell> getBlackButtons() {
         return blackButtons;
     }
 
-    public void setBorderCells(){
-        for(Cell cell : blackButtons){
-            if(cell.getXAdress() == currentCell.getXAdress() && cell.getYAdress() == currentCell.getYAdress()){
+    public List<Cell> getBearCell() {
+        return bearCell;
+    }
+
+    public void setBorderCells() {
+        for (Cell cell : blackButtons) {
+            if (cell.getXAdress() == currentCell.getXAdress() && cell.getYAdress() == currentCell.getYAdress()) {
                 borderCells = new ArrayList<>();
-                this.checkDiagonals(getEightWay(),cell);
-                this.checkDiagonals(getSevenWayG1A7(),cell);
-                this.checkDiagonals(getSevenWayH2B8(),cell);
-                this.checkDiagonals(getSixWayA3F8(),cell);
-                this.checkDiagonals(getSixWayC1H6(),cell);
-                this.checkDiagonals(getFiveWayE1A5(),cell);
-                this.checkDiagonals(getFiveWayH4D8(),cell);
-                this.checkDiagonals(getFourWayA5D8(),cell);
-                this.checkDiagonals(getFourWayE1H4(),cell);
-                this.checkDiagonals(getFreeWayC1A3(),cell);
-                this.checkDiagonals(getFreeWayH6F8(),cell);
-                this.checkDiagonals(getTwoWayA7B8(),cell);
-                this.checkDiagonals(getTwoWayG1H2(),cell);
+                bearCell = new ArrayList<>();
+                this.checkDiagonals(getEightWay(), cell);
+                this.checkDiagonals(getSevenWayG1A7(), cell);
+                this.checkDiagonals(getSevenWayH2B8(), cell);
+                this.checkDiagonals(getSixWayA3F8(), cell);
+                this.checkDiagonals(getSixWayC1H6(), cell);
+                this.checkDiagonals(getFiveWayE1A5(), cell);
+                this.checkDiagonals(getFiveWayH4D8(), cell);
+                this.checkDiagonals(getFourWayA5D8(), cell);
+                this.checkDiagonals(getFourWayE1H4(), cell);
+                this.checkDiagonals(getFreeWayC1A3(), cell);
+                this.checkDiagonals(getFreeWayH6F8(), cell);
+                this.checkDiagonals(getTwoWayA7B8(), cell);
+                this.checkDiagonals(getTwoWayG1H2(), cell);
             }
         }
 
     }
-    public void clearDiagonal(){
-        {
-
-                this.clearCurrent(getEightWay());
-                this.clearCurrent(getSevenWayG1A7());
-                this.clearCurrent(getSevenWayH2B8());
-                this.clearCurrent(getSixWayA3F8());
-                this.clearCurrent(getSixWayC1H6());
-                this.clearCurrent(getFiveWayE1A5());
-                this.clearCurrent(getFiveWayH4D8());
-                this.clearCurrent(getFourWayA5D8());
-                this.clearCurrent(getFourWayE1H4());
-                this.clearCurrent(getFreeWayC1A3());
-                this.clearCurrent(getFreeWayH6F8());
-                this.clearCurrent(getTwoWayA7B8());
-                this.clearCurrent(getTwoWayG1H2());
-            }
 
 
+    public void setNumberPlayer(int numberPlayer) {
+        this.numberPlayer = numberPlayer;
     }
-
-
 
     public List<Cell> getBorderCells() {
         return borderCells;
     }
 
-    public void checkDiagonals(List<Cell> diagonal, Cell cell){
-        if(diagonal.contains(cell)){
-            int z =1;
-            if(diagonal.size() > (diagonal.indexOf(cell)+1) && (diagonal.get(diagonal.indexOf(cell)+1).color == 0)) {
-                borderCells.add(diagonal.get(diagonal.indexOf(cell) + 1));
-            }
-            if(z == 1) {
-                leftCellDiagonal = diagonal.indexOf(cell);
-                z++;
-            }
-            else {
-                rightCellDiagonal = diagonal.indexOf(cell);
+    public void checkDiagonals(List<Cell> diagonal, Cell cell) {
+//        if(diagonal.contains(cell)){
+//            diagonalsWithCurrent.add(diagonal);
+//            if(diagonal.size() > (diagonal.indexOf(cell)+2) && (diagonal.get(diagonal.indexOf(cell)+1).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell)+2).color == 0)) {
+//                this.beat = true;
+//                bearCell.add(diagonal.get(diagonal.indexOf(cell) + 1));
+//                borderCells.add(diagonal.get(diagonal.indexOf(cell) + 2));
+//            }
+//            else if(diagonal.size() > (diagonal.indexOf(cell)+1) && (diagonal.get(diagonal.indexOf(cell)+1).color == 0)){
+//                borderCells.add(diagonal.get(diagonal.indexOf(cell) + 1));
+//
+//            }
+        if (numberPlayer == 1) {
 
-
-            }
-
-
+            checkFirstPlayerDiagonals(diagonal, cell, 1, 2);
+        } else {
+            checkSecondPlayerDiagonals(diagonal, cell, -1, -2);
         }
 
     }
 
-    public void clearCurrent(List<Cell> diagonal){
-        diagonal.get(leftCellDiagonal).setColorCell(0);
-
-        diagonal.get(leftCellDiagonal+1).setColorCell(1);
-//        for(Cell cell : blackButtons) {
-//            if(diagonal.get(leftCellDiagonal) == cell){
-//
-//
-//            }
-//            if(diagonal.get(rightCellDiagonal) == cell){
-//                cell.setColorCell(0);
-//            }
-//
-//        }
+    public void setListBorderCells(List<Cell> borderCells) {
+        this.borderCells = borderCells;
     }
+
+    public int getNumberPlayer() {
+        return numberPlayer;
+    }
+
+    public void setBearCell(List<Cell> bearCell) {
+        this.bearCell = bearCell;
+    }
+
+    public boolean isBeat() {
+
+        return beat;
+    }
+
+    public void setBeat(boolean beat) {
+        this.beat = beat;
+    }
+
+    public void checkFirstPlayerDiagonals(List<Cell> diagonal, Cell cell, int valueOfPlayers, int differentsOfPlayers) {
+        if (diagonal.contains(cell)) {
+
+            diagonalsWithCurrent.add(diagonal);
+            if ((diagonal.size() > (diagonal.indexOf(cell) + differentsOfPlayers) && (diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0)) ||
+                    ((diagonal.indexOf(cell) - differentsOfPlayers) >= (diagonal.indexOf(diagonal.get(0))) && (diagonal.get(diagonal.indexOf(cell) - valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) - differentsOfPlayers).color == 0)) ) {
+                this.beat = true;
+                if((diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0)) {
+                    bearCell.add(diagonal.get(diagonal.indexOf(cell) + valueOfPlayers));
+                    borderCells.add(diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers));
+                }
+                else {
+                    bearCell.add(diagonal.get(diagonal.indexOf(cell) - valueOfPlayers));
+                    borderCells.add(diagonal.get(diagonal.indexOf(cell) - differentsOfPlayers));
+                }
+
+            } else if (diagonal.size() > (diagonal.indexOf(cell) + valueOfPlayers) && (diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == 0)) {
+                if(!beat)
+                borderCells.add(diagonal.get(diagonal.indexOf(cell) + valueOfPlayers));
+
+            }
+        }
+    }
+
+    public void checkSecondPlayerDiagonals(List<Cell> diagonal, Cell cell, int valueOfPlayers, int differentsOfPlayers) {
+        if (diagonal.contains(cell)) {
+
+            diagonalsWithCurrent.add(diagonal);
+            if ((diagonal.indexOf(cell) + differentsOfPlayers) >= diagonal.indexOf(diagonal.get(0))  && (diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0) ||
+                    (diagonal.size() > (diagonal.indexOf(cell) - differentsOfPlayers) && (diagonal.get(diagonal.indexOf(cell) - valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) - differentsOfPlayers).color == 0))) {
+                this.beat = true;
+                if((diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0)) {
+                    bearCell.add(diagonal.get(diagonal.indexOf(cell) + valueOfPlayers));
+                    borderCells.add(diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers));
+                }
+                else {
+                    bearCell.add(diagonal.get(diagonal.indexOf(cell) - valueOfPlayers));
+                    borderCells.add(diagonal.get(diagonal.indexOf(cell) - differentsOfPlayers));
+                }
+
+            } else if ((diagonal.indexOf(cell) + valueOfPlayers) >= diagonal.indexOf(diagonal.get(0))  && (diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == 0)) {
+                if(!beat)
+                borderCells.add(diagonal.get(diagonal.indexOf(cell) + valueOfPlayers));
+
+            }
+        }
+    }
+
+    public int getOppositeNumerPlayer() {
+        if (numberPlayer == 1) {
+            return numberPlayer + 1;
+        } else {
+            return numberPlayer - 1;
+        }
+    }
+
+    public void changeDiagonalPlayer1(char countX, int countY, char oldCountX, int oldCountY) {
+        for (Cell cell :
+                borderCells) {
+            if (cell.getXAdress() == countX && cell.getYAdress() == countY) {
+                cell.setColorCell(numberPlayer);
+            }
+
+        }
+        numberPlayer = getOppositeNumerPlayer();
+        setEmptyCellInDiagonal(oldCountX, oldCountY);
+
+    }
+
+    public void setEmptyCellInDiagonal(char countX, int countY) {
+        if (diagonalsWithCurrent.size() > 1) {
+            for (int i = 0; i < 2; i++) {
+                for (Cell cell :
+                        diagonalsWithCurrent.get(i)) {
+                    if (cell.getXAdress() == countX && cell.getYAdress() == countY) {
+                        cell.setColorCell(0);
+
+
+                    }
+                }
+            }
+        } else {
+            for (Cell cell :
+                    diagonalsWithCurrent.get(0)) {
+                if (cell.getXAdress() == countX && cell.getYAdress() == countY) {
+                    cell.setColorCell(0);
+
+
+                }
+            }
+        }
+    }
+
 
     public List<Cell> getSevenWayG1A7() {
         return sevenWayG1A7;

@@ -31,7 +31,7 @@ public class Cell {
     }
 
 
-    public Cell(char xAdress,int yAdress){
+    public Cell(char xAdress, int yAdress) {
         this.xAdress = xAdress;
         this.yAdress = yAdress;
     }
@@ -44,12 +44,15 @@ public class Cell {
         this.xAdress = xAdress;
     }
 
-    public Cell(){
+    public Cell() {
 
     }
 
-    public char getXAdress(){
+    public char getXAdress() {
         return xAdress;
     }
-    public int getYAdress(){return yAdress;}
+
+    public int getYAdress() {
+        return yAdress;
+    }
 }

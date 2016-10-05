@@ -26,27 +26,24 @@ public class ChekersView extends JPanel {
     JLabel labelImage;
 
 
-
-
-    public ChekersView(Color color)  {
+    public ChekersView(Color color) {
         super();
 
         try {
-            if(color == Color.red) {
-                image= ImageIO.read(new File("src\\Image\\redd.png"));
+            if (color == Color.red) {
+                image = ImageIO.read(new File("src\\Image\\redd.png"));
             }
-            if(color == Color.white){
+            if (color == Color.white) {
                 image = ImageIO.read(new File("src\\Image\\whitee.png"));
             }
-        }
-        catch (IOException ex){
+        } catch (IOException ex) {
             System.out.printf("File hasn't been");
         }
 
     }
 
 
-    public void setColorChker(){
+    public void setColorChker() {
         labelImage = new JLabel(new ImageIcon(image));
         Dimension size = new Dimension(image.getWidth(null), image.getHeight(null));
         setPreferredSize(size);

@@ -35,9 +35,6 @@ public class Controller {
 
     }
 
-    public ChekersAlgoritm getChekersAlgoritm() {
-        return chekersAlgoritm;
-    }
 
     public void setAdressCell(int yAdress, char xadress) {
         chekersAlgoritm.addCells(xadress, yAdress);
@@ -61,10 +58,6 @@ public class Controller {
         return chekersAlgoritm.getBearCell();
     }
 
-    public void setNumerPlayer(int numerPlayer) {
-        chekersAlgoritm.setNumberPlayer(numerPlayer);
-    }
-
     public List<Cell> getBorderCellsForView() {
         return chekersAlgoritm.getBorderCells();
     }
@@ -73,9 +66,6 @@ public class Controller {
         chekersAlgoritm.changeDiagonalPlayer1(countX, countY, oldCountX, oldCountY);
     }
 
-    public void setBorderCellsController(List<Cell> borderCellsController){
-        chekersAlgoritm.setListBorderCells(borderCellsController);
-    }
 
     public int getOppositeNumberPlayerForView() {
         return chekersAlgoritm.getOppositeNumerPlayer();

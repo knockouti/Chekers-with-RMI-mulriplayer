@@ -20,15 +20,6 @@ public class Board {
     private JPanel horizontalNumbPanel;
     private JPanel mainPanel;
 
-
-    public int getNumberTIck() {
-        return numberTIck;
-    }
-
-    public void setNumberTIck(int numberTIck) {
-        this.numberTIck = numberTIck;
-    }
-
     public static List<CellView> getBlackButtons() {
 
         return blackButtons;
@@ -40,12 +31,7 @@ public class Board {
     CellView cellViewOld;
     Controller controller;
     List<Cell> borderCells;
-    List<Cell> bearCells;
     int numberTIck = 1;
-
-
-    int numberPlayer = 1;
-
 
     public Board(Controller controller) {
         this.controller = controller;
@@ -61,107 +47,136 @@ public class Board {
 
 
     public void setListenerForCells() {
-
         for (CellView cellView : blackButtons) {
             cellView.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     super.mousePressed(e);
                     for (CellView cell : Board.blackButtons) {
-                        cell.setBooleanBorder(false,cell);
-
+                        cell.setBooleanBorder(false, cell);
                     }
-                    if (e.getButton() == MouseEvent.BUTTON1 && numberTIck == 1) {
-                        if (!controller.getBooleanBear()) {
-                            if (cellView.getColor() == controller.getNumberPlayerInModel()) {
-                                System.out.println(cellView.xAdress + cellView.yAdress);
-                                controller.setCurrentCellController(cellView.getXAdress(), cellView.getYAdress());
+
+                    if (!controller.getBooleanBear()) {
+                        if (e.getButton() == MouseEvent.BUTTON1 && numberTIck == 1) {
+                            if (!controller.getBooleanBear()) {
+                                if (cellView.getColor() == controller.getNumberPlayerInModel()) {
+                                    System.out.println(cellView.xAdress + cellView.yAdress);
+                                    controller.setCurrentCellController(cellView.getXAdress(), cellView.getYAdress());
+                                    borderCells = controller.getBorderCellsForView();
+                                    cellViewOld = cellView;
+                                    for (CellView cell : getBlackButtons()) {
+                                        for (Cell cell1 : borderCells) {
+                                            if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
+                                                cell.setBooleanBorder(true, cellViewOld);
+                                            }
+                                        }
+                                    }
+                                    numberTIck = 2;
+                                }
+                            } else {
                                 borderCells = controller.getBorderCellsForView();
-                                cellViewOld = cellView;
+
                                 for (CellView cell : getBlackButtons()) {
                                     for (Cell cell1 : borderCells) {
-                                        if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
-
-                                                    cell.setBooleanBorder(true,cellViewOld);
-
+                                        for (Cell cell2 : controller.getBearCellsController()) {
+                                            if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
+                                                if (cell2.getXAdress() == cell.getXAdress() && cell2.getYAdress() == cell.getYAdress())
+                                                    cell.setBooleanBorder(true, cellViewOld);
+                                            }
                                         }
                                     }
                                 }
                                 numberTIck = 2;
                             }
-                        } else {
-                            borderCells = controller.getBorderCellsForView();
-                            cellViewOld = cellView;
+                        } else if (e.getButton() == MouseEvent.BUTTON3 && numberTIck == 2) {
+
                             for (CellView cell : getBlackButtons()) {
                                 for (Cell cell1 : borderCells) {
-                                    for (Cell cell2 : controller.getBearCellsController()) {
-                                        if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
-                                            if (cell2.getXAdress() == cell.getXAdress() && cell2.getYAdress() == cell.getYAdress())
-                                                cell.setBooleanBorder(true,cellViewOld);
-                                        }
+                                    if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
+                                        cell.setBooleanBorder(false, cellViewOld);
                                     }
                                 }
                             }
-                            numberTIck = 2;
-                        }
-                    } else if (e.getButton() == MouseEvent.BUTTON3 && numberTIck == 2) {
+                            if (!controller.getBooleanBear()) {
+                                for (Cell cell : borderCells) {
+                                    if (cellView.getXAdress() == cell.getXAdress() && cellView.getYAdress() == cell.getYAdress()) {
+                                        cellViewOld.setColorCell(0);
+                                        cellViewOld.remove(cellViewOld.getChekersView());
+                                        cellViewOld.repaint();
+                                        cellView.setChekersView(cellViewOld.getChekersView());
+                                        cellView.setColorCell(controller.getNumberPlayerInModel());
+                                        controller.changeDiagonalPlayer1(cellView.getXAdress(), cellView.getYAdress(), cellViewOld.getXAdress(), cellViewOld.getYAdress());
+                                        controller.getBearCellsController().clear();
+                                    }
+                                }
+                                numberTIck = 1;
+                                controller.getBearCellsController().clear();
 
+
+                            }
+
+
+                        } else if (cellView.getColor() == controller.getOppositeNumberPlayerForView()) {
+                            System.out.println("Это не ваша шашка!");
+                            numberTIck = 1;
+                        } else if (e.getButton() == MouseEvent.BUTTON1 && numberTIck == 2) {
+                            System.out.println("Нажмите правую кнопку мыши");
+                            numberTIck = 1;
+                        } else if (cellView.getColor() == 0) {
+                            System.out.println("Это gустое поле!");
+                            numberTIck = 1;
+                        }
+                    } else {
+                        borderCells = controller.getBorderCellsForView();
                         for (CellView cell : getBlackButtons()) {
                             for (Cell cell1 : borderCells) {
                                 if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
-                                    cell.setBooleanBorder(false,cellViewOld);
+
+                                    cell.setBooleanBorder(true, cellViewOld);
+                                    numberTIck = 2;
+
                                 }
                             }
                         }
-                        if (!controller.getBooleanBear()) {
-                            for (Cell cell : borderCells) {
-                                if (cellView.getXAdress() == cell.getXAdress() && cellView.getYAdress() == cell.getYAdress()) {
-                                    cellViewOld.setColorCell(0);
-                                    cellViewOld.remove(cellViewOld.getChekersView());
-                                    cellViewOld.repaint();
-                                    cellView.setChekersView(cellViewOld.getChekersView());
-                                    cellView.setColorCell(controller.getNumberPlayerInModel());
-                                    controller.changeDiagonalPlayer1(cellView.getXAdress(), cellView.getYAdress(), cellViewOld.getXAdress(), cellViewOld.getYAdress());
 
-                                }
-                            }
-                            numberTIck = 1;
-
-                        } else {
-                            for (Cell cell : borderCells) {
-                                if (cellView.getXAdress() == cell.getXAdress() && cellView.getYAdress() == cell.getYAdress()) {
-                                    for (CellView cellView1 : getBlackButtons()) {
-                                        if (cellView1.getXAdress() == controller.getBearCellsController().get(0).getXAdress() && cellView1.getYAdress() == controller.getBearCellsController().get(0).getYAdress()) {
-                                            cellViewOld.setColorCell(0);
-                                            controller.getBearCellsController().get(0).setColorCell(0);
-                                            cellViewOld.remove(cellViewOld.getChekersView());
-                                            cellViewOld.repaint();
-                                            cellView1.remove(cellView1.getChekersView());
-                                            cellView1.repaint();
-                                            cellView.setChekersView(cellViewOld.getChekersView());
-                                            cellView.setColorCell(controller.getNumberPlayerInModel());
-                                            controller.changeDiagonalPlayer1(cellView.getXAdress(), cellView.getYAdress(), cellViewOld.getXAdress(), cellViewOld.getYAdress());
-                                            numberTIck = 1;
-                                            controller.setBooleanBear(false);
-
-                                        }
-                                    }
+                    }
+                    if (e.getButton() == MouseEvent.BUTTON3 && numberTIck == 2) {
+                        for (CellView cell : getBlackButtons()) {
+                            for (Cell cell1 : borderCells) {
+                                if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
+                                    cell.setBooleanBorder(false, cellViewOld);
                                 }
                             }
                         }
-                    } else if (cellView.getColor() == controller.getOppositeNumberPlayerForView()) {
-                        System.out.println("Это не ваша шашка!");
-                        numberTIck = 1;
-                    } else if (e.getButton() == MouseEvent.BUTTON1 && numberTIck == 2) {
-                        System.out.println("Нажмите правую кнопку мыши");
-                        numberTIck = 1;
-                    } else if (cellView.getColor() == 0) {
-                        System.out.println("Это gустое поле!");
-                        numberTIck = 1;
+
+                        secodBeat(cellView);
                     }
 
                 }
             });
+        }
+    }
+
+    public void secodBeat(CellView cellView) {
+        for (Cell cell : borderCells) {
+            if (cellView.getXAdress() == cell.getXAdress() && cellView.getYAdress() == cell.getYAdress()) {
+                for (CellView cellView1 : getBlackButtons()) {
+                    if (cellView1.getXAdress() == controller.getBearCellsController().get(0).getXAdress() && cellView1.getYAdress() == controller.getBearCellsController().get(0).getYAdress()) {
+                        cellViewOld.setColorCell(0);
+                        controller.getBearCellsController().get(0).setColorCell(0);
+                        cellViewOld.remove(cellViewOld.getChekersView());
+                        cellViewOld.repaint();
+                        cellView1.remove(cellView1.getChekersView());
+                        cellView1.repaint();
+                        cellView.setChekersView(cellViewOld.getChekersView());
+                        cellView.setColorCell(controller.getNumberPlayerInModel());
+                        controller.changeDiagonalPlayer1(cellView.getXAdress(), cellView.getYAdress(), cellViewOld.getXAdress(), cellViewOld.getYAdress());
+                        numberTIck = 1;
+                        controller.setBooleanBear(false);
+
+                    }
+                }
+            }
         }
     }
 
@@ -212,11 +227,6 @@ public class Board {
         }
 
 
-    }
-
-
-    public Controller getController() {
-        return controller;
     }
 
 

@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Cell;
 import Model.ChekersAlgoritm;
+import Model.Player;
 import View.Board;
 import View.MainFrame;
 
@@ -17,6 +18,7 @@ public class Controller {
 
     public Controller() {
         chekersAlgoritm = new ChekersAlgoritm();
+
         board = new Board(this);
         mainFrame = new MainFrame(board);
         chekersAlgoritm.setEightWay();
@@ -68,7 +70,7 @@ public class Controller {
 
 
     public int getOppositeNumberPlayerForView() {
-        return chekersAlgoritm.getOppositeNumerPlayer();
+        return chekersAlgoritm.getPlayer().getOppositeNumerPlayer();
     }
 
     public boolean getBooleanBear() {

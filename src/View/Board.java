@@ -73,6 +73,13 @@ public class Board {
                                     }
                                     numberTIck = 2;
                                 }
+                                else {
+                                   for(CellView cellView1 : getBlackButtons()){
+                                      if(cellView1.getColor() == 0){
+                                          System.out.println("Проиграл игрок"+controller.getNumberPlayerInModel());
+                                      }
+                                   }
+                                }
                             } else {
                                 borderCells = controller.getBorderCellsForView();
 

@@ -34,16 +34,27 @@ public class ChekersAlgoritm {
     private List<Cell> fourWayE1H4; //e1, f2, g3, h4
     private List<Cell> twoWayG1H2; //g1, h2
     private List<Cell> twoWayA7B8; //g1, h2
-    private int numberPlayer = 1;
-    private int numerClick = 1;
+//    private int numberPlayer = 1;
     private List<Cell> bearCell;
     private List<Cell> borderCells;
     private List<List<Cell>> diagonalsWithCurrent;
     private boolean beat;
-    private int leftCellDiagonal;
-    private int rightCellDiagonal;
+    List<Player> listPlayers;
+    Player player1;
+    Player player2;
+    Player player;
+
+    public Player getPlayer() {
+        return player;
+    }
 
     public ChekersAlgoritm() {
+        player1= new Player("player1", 1);
+        player2= new Player("player2", 2);
+        listPlayers = new ArrayList<>(2);
+        listPlayers.add(player1);
+        listPlayers.add(player2);
+        player = listPlayers.get(0);
         blackButtons = new ArrayList<>();
         eightWay = new ArrayList<>();
         sevenWayG1A7 = new ArrayList<>();
@@ -96,16 +107,14 @@ public class ChekersAlgoritm {
 
     }
 
-    public void setNumberPlayer(int numberPlayer) {
-        this.numberPlayer = numberPlayer;
-    }
+
 
     public List<Cell> getBorderCells() {
         return borderCells;
     }
 
     public void checkDiagonals(List<Cell> diagonal, Cell cell) {
-        if (numberPlayer == 1) {
+        if (player.getIdentifier() == 1) {
 
             checkFirstPlayerDiagonals(diagonal, cell, 1, 2);
         } else {
@@ -119,7 +128,7 @@ public class ChekersAlgoritm {
     }
 
     public int getNumberPlayer() {
-        return numberPlayer;
+        return player.getIdentifier();
     }
 
     public void setBearCell(List<Cell> bearCell) {
@@ -139,8 +148,8 @@ public class ChekersAlgoritm {
         if (diagonal.contains(cell)) {
 
             diagonalsWithCurrent.add(diagonal);
-            if ((diagonal.size() > (diagonal.indexOf(cell) + differentsOfPlayers) && (diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0)) ||
-                    ((diagonal.indexOf(cell) - differentsOfPlayers) >= (diagonal.indexOf(diagonal.get(0))) && (diagonal.get(diagonal.indexOf(cell) - valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) - differentsOfPlayers).color == 0))) {
+            if ((diagonal.size() > (diagonal.indexOf(cell) + differentsOfPlayers) && (diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (player.getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0)) ||
+                    ((diagonal.indexOf(cell) - differentsOfPlayers) >= (diagonal.indexOf(diagonal.get(0))) && (diagonal.get(diagonal.indexOf(cell) - valueOfPlayers).color == (player.getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) - differentsOfPlayers).color == 0))) {
                 this.beat = true;
                 checkDIagonal(diagonal, cell, valueOfPlayers, differentsOfPlayers);
 
@@ -153,7 +162,7 @@ public class ChekersAlgoritm {
     }
 
     public void checkDIagonal(List<Cell> diagonal, Cell cell, int valueOfPlayers, int differentsOfPlayers) {
-        if ((diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0)) {
+        if ((diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (player.getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0)) {
             bearCell.add(diagonal.get(diagonal.indexOf(cell) + valueOfPlayers));
             borderCells.add(diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers));
         } else {
@@ -166,8 +175,8 @@ public class ChekersAlgoritm {
         if (diagonal.contains(cell)) {
 
             diagonalsWithCurrent.add(diagonal);
-            if ((diagonal.indexOf(cell) + differentsOfPlayers) >= diagonal.indexOf(diagonal.get(0)) && (diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0) ||
-                    (diagonal.size() > (diagonal.indexOf(cell) - differentsOfPlayers) && (diagonal.get(diagonal.indexOf(cell) - valueOfPlayers).color == (getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) - differentsOfPlayers).color == 0))) {
+            if ((diagonal.indexOf(cell) + differentsOfPlayers) >= diagonal.indexOf(diagonal.get(0)) && (diagonal.get(diagonal.indexOf(cell) + valueOfPlayers).color == (player.getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) + differentsOfPlayers).color == 0) ||
+                    (diagonal.size() > (diagonal.indexOf(cell) - differentsOfPlayers) && (diagonal.get(diagonal.indexOf(cell) - valueOfPlayers).color == (player.getOppositeNumerPlayer())) && (diagonal.get(diagonal.indexOf(cell) - differentsOfPlayers).color == 0))) {
                 this.beat = true;
                 checkDIagonal(diagonal, cell, valueOfPlayers, differentsOfPlayers);
 
@@ -179,23 +188,29 @@ public class ChekersAlgoritm {
         }
     }
 
-    public int getOppositeNumerPlayer() {
-        if (numberPlayer == 1) {
-            return numberPlayer + 1;
-        } else {
-            return numberPlayer - 1;
-        }
-    }
+//    public int getOppositeNumerPlayer() {
+//        if (numberPlayer == 1) {
+//            return numberPlayer + 1;
+//        } else {
+//            return numberPlayer - 1;
+//        }
+//    }
 
     public void changeDiagonalPlayer1(char countX, int countY, char oldCountX, int oldCountY) {
         for (Cell cell :
                 borderCells) {
             if (cell.getXAdress() == countX && cell.getYAdress() == countY) {
-                cell.setColorCell(numberPlayer);
+                cell.setColorCell(player.getIdentifier());
             }
 
         }
-        numberPlayer = getOppositeNumerPlayer();
+        if (player == listPlayers.get(0)){
+            player = listPlayers.get(1);
+        }
+        else {
+            player = listPlayers.get(0);
+        }
+
         setEmptyCellInDiagonal(oldCountX, oldCountY);
 
     }

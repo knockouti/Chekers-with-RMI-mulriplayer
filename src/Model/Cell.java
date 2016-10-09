@@ -36,18 +36,6 @@ public class Cell {
         this.yAdress = yAdress;
     }
 
-    public void setyAdress(int yAdress) {
-        this.yAdress = yAdress;
-    }
-
-    public void setxAdress(char xAdress) {
-        this.xAdress = xAdress;
-    }
-
-    public Cell() {
-
-    }
-
     public char getXAdress() {
         return xAdress;
     }

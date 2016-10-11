@@ -1,6 +1,4 @@
-package Model;
-
-import Controller.ClientInterface;
+package Contr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +6,7 @@ import java.util.List;
 /**
  * Created by Igor on 20.09.2016.
  */
-public class ChekersAlgoritm implements ClientInterface{
+public class ChekersAlgoritm{
     private List<Cell> blackButtons;
     public static final int SIZE_STRING = 8;
     public static final int SIZE_BUTTONS = 32;

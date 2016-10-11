@@ -1,8 +1,6 @@
-package Model;
+package Contr;
 
-import java.awt.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by Igor on 20.09.2016.

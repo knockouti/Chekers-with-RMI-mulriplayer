@@ -1,12 +1,7 @@
-package Controller;
-
-import Model.Cell;
-import Model.ChekersAlgoritm;
-import Model.Player;
+package Contr;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +10,6 @@ import java.util.List;
 public interface ClientInterface extends Remote {
     public ChekersAlgoritm getChekers() throws RemoteException;
     public void setCurrentCell(char xAdress, int yAdress) throws RemoteException;
-
     public void setBorderCells() throws RemoteException;
 
     public void setBeat(boolean beat) throws RemoteException;

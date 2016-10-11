@@ -1,12 +1,13 @@
 package Model;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Igor on 20.09.2016.
  */
-public class Cell {
+public class Cell implements Serializable{
     int yAdress;
     char xAdress;
     int color;

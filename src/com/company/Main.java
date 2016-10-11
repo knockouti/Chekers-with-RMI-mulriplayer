@@ -4,9 +4,17 @@ import Controller.Controller;
 import View.Board;
 import View.MainFrame;
 
+import java.rmi.Naming;
+
 public class Main {
 
     public static void main(String[] args) {
-        Controller controller = new Controller();
+        try {
+            Controller controller = new Controller();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

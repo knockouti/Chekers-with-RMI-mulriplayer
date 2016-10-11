@@ -56,47 +56,100 @@ public class Board {
                         cell.setBooleanBorder(false, cell);
                     }
 
-                    if (!controller.getBooleanBear()) {
-                        if (e.getButton() == MouseEvent.BUTTON1 && numberTIck == 1) {
-                            if (!controller.getBooleanBear()) {
-                                if (cellView.getColor() == controller.getNumberPlayerInModel()) {
-                                    System.out.println(cellView.xAdress + cellView.yAdress);
-                                    controller.setCurrentCellController(cellView.getXAdress(), cellView.getYAdress());
-                                    borderCells = controller.getBorderCellsForView();
-                                    cellViewOld = cellView;
+                    try {
+boolean bool = true;
+borderCells = controller.getServer().getBorderCellsForView();
+                        if (!controller.getServer().getBooleanBear()) {
+                            if (e.getButton() == MouseEvent.BUTTON1 && numberTIck == 1) {
+                                if (!controller.getServer().getBooleanBear()) {
+                                    if (cellView.getColor() == controller.getServer().getNumberPlayerInModel()) {
+                                        System.out.println(cellView.xAdress + cellView.yAdress);
+                                        controller.getServer().setCurrentCellController(cellView.getXAdress(), cellView.getYAdress());
+                                        borderCells = controller.getServer().getBorderCellsForView();
+                                        cellViewOld = cellView;
+                                        for (CellView cell : getBlackButtons()) {
+                                            for (Cell cell1 : borderCells) {
+                                                if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
+                                                    cell.setBooleanBorder(true, cellViewOld);
+                                                }
+                                            }
+                                        }
+                                        numberTIck = 2;
+                                    } else {
+                                        for (CellView cellView1 : getBlackButtons()) {
+                                            if (cellView1.getColor() == 0) {
+                                                System.out.println("Проиграл игрок" + controller.getServer().getNumberPlayerInModel());
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    borderCells = controller.getServer().getBorderCellsForView();
+
                                     for (CellView cell : getBlackButtons()) {
                                         for (Cell cell1 : borderCells) {
-                                            if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
-                                                cell.setBooleanBorder(true, cellViewOld);
+                                            for (Cell cell2 : controller.getServer().getBearCellsController()) {
+                                                if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
+                                                    if (cell2.getXAdress() == cell.getXAdress() && cell2.getYAdress() == cell.getYAdress())
+                                                        cell.setBooleanBorder(true, cellViewOld);
+                                                }
                                             }
                                         }
                                     }
                                     numberTIck = 2;
                                 }
-                                else {
-                                   for(CellView cellView1 : getBlackButtons()){
-                                      if(cellView1.getColor() == 0){
-                                          System.out.println("Проиграл игрок"+controller.getNumberPlayerInModel());
-                                      }
-                                   }
-                                }
-                            } else {
-                                borderCells = controller.getBorderCellsForView();
+                            } else if (e.getButton() == MouseEvent.BUTTON3 && numberTIck == 2) {
 
                                 for (CellView cell : getBlackButtons()) {
                                     for (Cell cell1 : borderCells) {
-                                        for (Cell cell2 : controller.getBearCellsController()) {
-                                            if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
-                                                if (cell2.getXAdress() == cell.getXAdress() && cell2.getYAdress() == cell.getYAdress())
-                                                    cell.setBooleanBorder(true, cellViewOld);
-                                            }
+                                        if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
+                                            cell.setBooleanBorder(false, cellViewOld);
                                         }
                                     }
                                 }
-                                numberTIck = 2;
-                            }
-                        } else if (e.getButton() == MouseEvent.BUTTON3 && numberTIck == 2) {
+                                if (!controller.getServer().getBooleanBear()) {
+                                    for (Cell cell : borderCells) {
+                                        if (cellView.getXAdress() == cell.getXAdress() && cellView.getYAdress() == cell.getYAdress()) {
+                                            cellViewOld.setColorCell(0);
+                                            cellViewOld.remove(cellViewOld.getChekersView());
+                                            cellViewOld.repaint();
+                                            cellView.setChekersView(cellViewOld.getChekersView());
+                                            cellView.setColorCell(controller.getServer().getNumberPlayerInModel());
+                                            controller.getServer().changeDiagonalPlayer1(cellView.getXAdress(), cellView.getYAdress(), cellViewOld.getXAdress(), cellViewOld.getYAdress());
+                                            controller.getServer().getBearCellsController().clear();
+                                        }
+                                    }
+                                    numberTIck = 1;
+                                    controller.getServer().getBearCellsController().clear();
 
+
+                                }
+
+
+                            } else if (cellView.getColor() == controller.getServer().getOppositeNumberPlayerForView()) {
+                                System.out.println("Это не ваша шашка!");
+                                numberTIck = 1;
+                            } else if (e.getButton() == MouseEvent.BUTTON1 && numberTIck == 2) {
+                                System.out.println("Нажмите правую кнопку мыши");
+                                numberTIck = 1;
+                            } else if (cellView.getColor() == 0) {
+                                System.out.println("Это gустое поле!");
+                                numberTIck = 1;
+                            }
+                        } else {
+                            borderCells = controller.getServer().getBorderCellsForView();
+                            for (CellView cell : getBlackButtons()) {
+                                for (Cell cell1 : borderCells) {
+                                    if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
+
+                                        cell.setBooleanBorder(true, cellViewOld);
+                                        numberTIck = 2;
+
+                                    }
+                                }
+                            }
+
+                        }
+                        if (e.getButton() == MouseEvent.BUTTON3 && numberTIck == 2) {
                             for (CellView cell : getBlackButtons()) {
                                 for (Cell cell1 : borderCells) {
                                     if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
@@ -104,86 +157,45 @@ public class Board {
                                     }
                                 }
                             }
-                            if (!controller.getBooleanBear()) {
-                                for (Cell cell : borderCells) {
-                                    if (cellView.getXAdress() == cell.getXAdress() && cellView.getYAdress() == cell.getYAdress()) {
-                                        cellViewOld.setColorCell(0);
-                                        cellViewOld.remove(cellViewOld.getChekersView());
-                                        cellViewOld.repaint();
-                                        cellView.setChekersView(cellViewOld.getChekersView());
-                                        cellView.setColorCell(controller.getNumberPlayerInModel());
-                                        controller.changeDiagonalPlayer1(cellView.getXAdress(), cellView.getYAdress(), cellViewOld.getXAdress(), cellViewOld.getYAdress());
-                                        controller.getBearCellsController().clear();
-                                    }
-                                }
-                                numberTIck = 1;
-                                controller.getBearCellsController().clear();
 
-
-                            }
-
-
-                        } else if (cellView.getColor() == controller.getOppositeNumberPlayerForView()) {
-                            System.out.println("Это не ваша шашка!");
-                            numberTIck = 1;
-                        } else if (e.getButton() == MouseEvent.BUTTON1 && numberTIck == 2) {
-                            System.out.println("Нажмите правую кнопку мыши");
-                            numberTIck = 1;
-                        } else if (cellView.getColor() == 0) {
-                            System.out.println("Это gустое поле!");
-                            numberTIck = 1;
-                        }
-                    } else {
-                        borderCells = controller.getBorderCellsForView();
-                        for (CellView cell : getBlackButtons()) {
-                            for (Cell cell1 : borderCells) {
-                                if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
-
-                                    cell.setBooleanBorder(true, cellViewOld);
-                                    numberTIck = 2;
-
-                                }
-                            }
+                            secodBeat(cellView);
                         }
 
                     }
-                    if (e.getButton() == MouseEvent.BUTTON3 && numberTIck == 2) {
-                        for (CellView cell : getBlackButtons()) {
-                            for (Cell cell1 : borderCells) {
-                                if (cell.getXAdress() == cell1.getXAdress() && cell.getYAdress() == cell1.getYAdress()) {
-                                    cell.setBooleanBorder(false, cellViewOld);
-                                }
-                            }
-                        }
-
-                        secodBeat(cellView);
+                    catch (Exception ex){
                     }
-
                 }
             });
         }
     }
 
     public void secodBeat(CellView cellView) {
-        for (Cell cell : borderCells) {
-            if (cellView.getXAdress() == cell.getXAdress() && cellView.getYAdress() == cell.getYAdress()) {
-                for (CellView cellView1 : getBlackButtons()) {
-                    if (cellView1.getXAdress() == controller.getBearCellsController().get(0).getXAdress() && cellView1.getYAdress() == controller.getBearCellsController().get(0).getYAdress()) {
-                        cellViewOld.setColorCell(0);
-                        controller.getBearCellsController().get(0).setColorCell(0);
-                        cellViewOld.remove(cellViewOld.getChekersView());
-                        cellViewOld.repaint();
-                        cellView1.remove(cellView1.getChekersView());
-                        cellView1.repaint();
-                        cellView.setChekersView(cellViewOld.getChekersView());
-                        cellView.setColorCell(controller.getNumberPlayerInModel());
-                        controller.changeDiagonalPlayer1(cellView.getXAdress(), cellView.getYAdress(), cellViewOld.getXAdress(), cellViewOld.getYAdress());
-                        numberTIck = 1;
-                        controller.setBooleanBear(false);
+        try {
 
+
+            for (Cell cell : borderCells) {
+                if (cellView.getXAdress() == cell.getXAdress() && cellView.getYAdress() == cell.getYAdress()) {
+                    for (CellView cellView1 : getBlackButtons()) {
+                        if (cellView1.getXAdress() == controller.getServer().getBearCellsController().get(0).getXAdress() && cellView1.getYAdress() == controller.getServer().getBearCellsController().get(0).getYAdress()) {
+                            cellViewOld.setColorCell(0);
+                            controller.getServer().getBearCellsController().get(0).setColorCell(0);
+                            cellViewOld.remove(cellViewOld.getChekersView());
+                            cellViewOld.repaint();
+                            cellView1.remove(cellView1.getChekersView());
+                            cellView1.repaint();
+                            cellView.setChekersView(cellViewOld.getChekersView());
+                            cellView.setColorCell(controller.getServer().getNumberPlayerInModel());
+                            controller.getServer().changeDiagonalPlayer1(cellView.getXAdress(), cellView.getYAdress(), cellViewOld.getXAdress(), cellViewOld.getYAdress());
+                            numberTIck = 1;
+                            controller.getServer().setBooleanBear(false);
+
+                        }
                     }
                 }
             }
+        }
+        catch (Exception ex){
+
         }
     }
 

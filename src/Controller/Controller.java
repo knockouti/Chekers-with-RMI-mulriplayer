@@ -6,18 +6,36 @@ import Model.Player;
 import View.Board;
 import View.MainFrame;
 
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 /**
  * Created by Igor on 20.09.2016.
  */
-public class Controller {
+public class Controller{
     ChekersAlgoritm chekersAlgoritm;
     Board board;
     MainFrame mainFrame;
-
-    public Controller() {
+    ControllerServerInterface server;
+    public Controller() throws RemoteException{
         chekersAlgoritm = new ChekersAlgoritm();
+
+
+        try {
+            Registry registry = LocateRegistry.getRegistry(null, 2099);
+           server = (ControllerServerInterface)registry.lookup("Server");
+
+            ClientInterface stub = (ClientInterface) UnicastRemoteObject.exportObject(chekersAlgoritm, 0);
+
+            server.registPalayer(stub);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         board = new Board(this);
         mainFrame = new MainFrame(board);
@@ -37,7 +55,9 @@ public class Controller {
 
     }
 
-
+public ControllerServerInterface getServer(){
+    return server;
+}
     public void setAdressCell(int yAdress, char xadress) {
         chekersAlgoritm.addCells(xadress, yAdress);
     }
@@ -46,38 +66,7 @@ public class Controller {
         return chekersAlgoritm.getBlackButtons();
     }
 
-    public void setCurrentCellController(char xAdrss, int yAdress) {
-        chekersAlgoritm.setCurrentCell(xAdrss, yAdress);
-        chekersAlgoritm.setBorderCells();
-
-    }
-
-    public void setBooleanBear(boolean booleanBear) {
-        chekersAlgoritm.setBeat(booleanBear);
-    }
-
-    public List<Cell> getBearCellsController() {
-        return chekersAlgoritm.getBearCell();
-    }
-
-    public List<Cell> getBorderCellsForView() {
-        return chekersAlgoritm.getBorderCells();
-    }
-
-    public void changeDiagonalPlayer1(char countX, int countY, char oldCountX, int oldCountY) {
-        chekersAlgoritm.changeDiagonalPlayer1(countX, countY, oldCountX, oldCountY);
-    }
-
-
-    public int getOppositeNumberPlayerForView() {
-        return chekersAlgoritm.getPlayer().getOppositeNumerPlayer();
-    }
-
-    public boolean getBooleanBear() {
-        return chekersAlgoritm.isBeat();
-    }
-
-    public int getNumberPlayerInModel() {
-        return chekersAlgoritm.getNumberPlayer();
-    }
+   public ChekersAlgoritm getChekersAlgoritm(){
+       return  chekersAlgoritm;
+   }
 }

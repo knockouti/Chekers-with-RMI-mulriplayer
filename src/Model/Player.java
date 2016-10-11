@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * Created by Igor on 09.10.2016.
  */
-public class Player {
+public class Player implements Serializable {
     final String name;
 
     public String getName() {

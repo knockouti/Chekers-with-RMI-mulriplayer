@@ -1,12 +1,14 @@
 package Model;
 
+import Controller.ClientInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Igor on 20.09.2016.
  */
-public class ChekersAlgoritm {
+public class ChekersAlgoritm implements ClientInterface{
     private List<Cell> blackButtons;
     public static final int SIZE_STRING = 8;
     public static final int SIZE_BUTTONS = 32;
@@ -16,7 +18,9 @@ public class ChekersAlgoritm {
     public int countY = 0;
     public int size = 0;
     public Cell currentCell;
-
+    public ChekersAlgoritm getChekers(){
+        return this;
+    }
     public List<Cell> getEightWay() {
         return eightWay;
     }
@@ -50,6 +54,7 @@ public class ChekersAlgoritm {
 
     public ChekersAlgoritm() {
         player1= new Player("player1", 1);
+
         player2= new Player("player2", 2);
         listPlayers = new ArrayList<>(2);
         listPlayers.add(player1);

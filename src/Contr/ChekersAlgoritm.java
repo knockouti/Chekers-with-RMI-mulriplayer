@@ -1,12 +1,16 @@
 package Contr;
 
+import View.PlayerInterface;
+
+import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Igor on 20.09.2016.
  */
-public class ChekersAlgoritm{
+public class ChekersAlgoritm implements Serializable {
     private List<Cell> blackButtons;
     public static final int SIZE_STRING = 8;
     public static final int SIZE_BUTTONS = 32;
@@ -16,9 +20,11 @@ public class ChekersAlgoritm{
     public int countY = 0;
     public int size = 0;
     public Cell currentCell;
-    public ChekersAlgoritm getChekers(){
+
+    public ChekersAlgoritm getChekers() {
         return this;
     }
+
     public List<Cell> getEightWay() {
         return eightWay;
     }
@@ -36,28 +42,66 @@ public class ChekersAlgoritm{
     private List<Cell> fourWayE1H4; //e1, f2, g3, h4
     private List<Cell> twoWayG1H2; //g1, h2
     private List<Cell> twoWayA7B8; //g1, h2
-//    private int numberPlayer = 1;
+    //    private int numberPlayer = 1;
     private List<Cell> bearCell;
     private List<Cell> borderCells;
     private List<List<Cell>> diagonalsWithCurrent;
     private boolean beat;
     List<Player> listPlayers;
+    Player player;
     Player player1;
     Player player2;
-    Player player;
+    List<Player> playersList;
+    PlayerInterface playerInterfaceNow;
+    List<PlayerInterface> playerInterfaces;
 
     public Player getPlayer() {
         return player;
     }
 
     public ChekersAlgoritm() {
-        player1= new Player("player1", 1);
 
-        player2= new Player("player2", 2);
-        listPlayers = new ArrayList<>(2);
-        listPlayers.add(player1);
-        listPlayers.add(player2);
-        player = listPlayers.get(0);
+    }
+
+    public void setPlayersList(ArrayList<PlayerInterface> playerInterfaces) {
+        this.playerInterfaces = playerInterfaces;
+        setPlayerAndCurrentPlayer();
+    }
+
+    public PlayerInterface getPlayerInterfaceNow() {
+        return playerInterfaceNow;
+    }
+
+    public void setPlayerAndCurrentPlayer() {
+        if(player == null) {
+           player = new Player();
+            playersList = new ArrayList<>(2);
+        }
+    if(player1 == null) {
+        player1 = new Player();
+        playersList.add(player1);
+    }
+    if (player2 == null){
+        player2 = new Player();
+        playersList.add(player2);
+    }
+
+
+
+if(playersList.size() == 2) {
+    playerInterfaceNow = playerInterfaces.get(0);
+    player.setPlayerInterfaces(playerInterfaces, playerInterfaceNow);
+}
+    }
+
+    public ChekersAlgoritm(List<PlayerInterface> playerInterfaces) {
+        this.playerInterfaces = playerInterfaces;
+
+        setPlayerAndCurrentPlayer();
+//        listPlayers = new ArrayList<>(2);
+//        listPlayers.add(playerInterfaceNow);
+//        listPlayers.add(player2);
+
         blackButtons = new ArrayList<>();
         eightWay = new ArrayList<>();
         sevenWayG1A7 = new ArrayList<>();
@@ -109,7 +153,6 @@ public class ChekersAlgoritm{
         }
 
     }
-
 
 
     public List<Cell> getBorderCells() {
@@ -199,7 +242,17 @@ public class ChekersAlgoritm{
 //        }
 //    }
 
-    public void changeDiagonalPlayer1(char countX, int countY, char oldCountX, int oldCountY) {
+    public void changeDiagonalPlayer1(char countX, int countY, char oldCountX, int oldCountY) throws RemoteException {
+        for(PlayerInterface playerInterface : playerInterfaces){
+            if(playerInterfaceNow != playerInterface){
+                if(isBeat())
+                playerInterface.setChekersView(playerInterfaceNow.getXNowAdress(), playerInterfaceNow.getYNowAdress(),playerInterfaceNow.getXOldAdress(),playerInterfaceNow.getYOldAdress(),
+                        playerInterfaceNow.getCellView1X(), playerInterfaceNow.getCellView1Y());
+                else {
+                    playerInterface.setChekersView(playerInterfaceNow.getXNowAdress(), playerInterfaceNow.getYNowAdress(),playerInterfaceNow.getXOldAdress(),playerInterfaceNow.getYOldAdress(),'p', -1);
+                }
+            }
+        }
         for (Cell cell :
                 borderCells) {
             if (cell.getXAdress() == countX && cell.getYAdress() == countY) {
@@ -207,11 +260,12 @@ public class ChekersAlgoritm{
             }
 
         }
-        if (player == listPlayers.get(0)){
-            player = listPlayers.get(1);
-        }
-        else {
-            player = listPlayers.get(0);
+        if (player.getIdentifier() == 1) {
+            playerInterfaceNow = playerInterfaces.get(1);
+            player.setIdentifier(2);
+        } else {
+            playerInterfaceNow = playerInterfaces.get(0);
+            player.setIdentifier(1);
         }
 
         setEmptyCellInDiagonal(oldCountX, oldCountY);

@@ -4,37 +4,40 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 
 /**
  * Created by Igor on 19.09.2016.
  */
-public class ChekersView extends JPanel {
+public class ChekersView extends JPanel implements Serializable {
 
     BufferedImage image;
     BufferedImage imageRedCheker;
     JLabel labelImage;
 
 
-    public ChekersView(Color color) {
+
+
+    public ChekersView(Color color)  {
         super();
 
         try {
-            if (color == Color.red) {
-                image = ImageIO.read(new File("src\\Image\\redd.png"));
+            if(color == Color.red) {
+                image= ImageIO.read(new File("src\\redd.png"));
             }
-            if (color == Color.white) {
-                image = ImageIO.read(new File("src\\Image\\whitee.png"));
+            if(color == Color.white){
+                image = ImageIO.read(new File("src\\whitee.png"));
             }
-        } catch (IOException ex) {
+        }
+        catch (IOException ex){
             System.out.printf("File hasn't been");
         }
 
     }
 
 
-    public void setColorChker() {
+    public void setColorChker(){
         labelImage = new JLabel(new ImageIcon(image));
         Dimension size = new Dimension(image.getWidth(null), image.getHeight(null));
         setPreferredSize(size);
@@ -50,6 +53,5 @@ public class ChekersView extends JPanel {
         g.drawImage(image, 0, 0, null);
 
     }
-
 
 }

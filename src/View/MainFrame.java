@@ -4,16 +4,18 @@ import Contr.Controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
+import java.rmi.RemoteException;
 
 /**
  * Created by Igor on 13.09.2016.
  */
-public class MainFrame {
+public class MainFrame implements Serializable{
     private JFrame mainFrame;
     private Board board;
     Controller controller;
 
-    public MainFrame(Board board) {
+    public MainFrame(Board board) throws RemoteException {
         mainFrame = new JFrame();
         this.board = board;
         mainFrame.setPreferredSize(new Dimension(800, 800));

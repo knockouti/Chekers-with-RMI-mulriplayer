@@ -1,25 +1,42 @@
 package Contr;
 
+import View.PlayerInterface;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Igor on 09.10.2016.
  */
 public class Player implements Serializable {
-    final String name;
+    List<PlayerInterface> playerInterfaces;
 
-    public String getName() {
-        return name;
-    }
+    public int identifier;
+    final boolean [] indetificators = new boolean[]{false,false};
+
 
     public int getIdentifier() {
         return identifier;
     }
 
-    final int identifier;
-    public Player(String name , int identifier){
+    public void setIdentifier(int identifier) {
         this.identifier = identifier;
-        this.name = name;
+    }
+
+    public void setPlayerInterfaces(List<PlayerInterface> playerInterfaces, PlayerInterface playerNow) {
+        this.playerInterfaces = playerInterfaces;
+            if(playerNow == playerInterfaces.get(0)){
+                identifier = 1;
+            }
+
+
+    }
+    public List<PlayerInterface> getPlayerInter(){
+        return playerInterfaces;
+    }
+    public Player(){
+
+
     }
     public int getOppositeNumerPlayer() {
         if (identifier == 1) {

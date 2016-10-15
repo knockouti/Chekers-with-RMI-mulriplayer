@@ -2,12 +2,13 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 
 
 /**
  * Created by Igor on 14.09.2016.
  */
-public class CellView extends JPanel {
+public class CellView extends JPanel implements Serializable{
     int yAdress;
     char xAdress;
     boolean border;

@@ -8,17 +8,11 @@ import java.io.Serializable;
 /**
  * Created by Igor on 14.09.2016.
  */
-public class CellView extends JPanel implements Serializable{
+public class CellView extends JPanel implements Serializable {
     int yAdress;
     char xAdress;
     boolean border;
-    boolean isEmpty;
     ChekersView chekersView;
-
-    public void setColor(int color) {
-        this.color = color;
-    }
-
     int color;
 
 
@@ -68,9 +62,6 @@ public class CellView extends JPanel implements Serializable{
         super();
         this.xAdress = xAdress;
         this.yAdress = yAdress;
-        JLabel label = new JLabel("<html>Text color: <font color='red'>red</font></html>");
-        label.setText(String.valueOf(xAdress) + yAdress);
-        this.add(label);
         this.setBackground(Color.black);
         this.setPreferredSize(new Dimension(100, 100));
 

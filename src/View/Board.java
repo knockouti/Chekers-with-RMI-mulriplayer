@@ -18,46 +18,32 @@ import java.util.List;
 /**
  * Created by Igor on 13.09.2016.
  */
-public class Board implements PlayerInterface, Serializable{
+public class Board implements PlayerInterface, Serializable {
     public static final int SIZE_FIELD = 64;
     public static final int SIZE_STRING = 8;
     private static Board board;
     private JPanel verticalNubmPanel;
     private JPanel horizontalNumbPanel;
     private static JPanel mainPanel;
-    private Controller cont;
-
-
-
-    public void setCellView1(CellView cellView1) {
-        this.cellView1 = cellView1;
-    }
-
-    public static List<CellView> blackButtons;
-    private List<CellView> whiteButtons;
-    ChekersView chekersView;
-
-    public CellView getCellViewOld() {
-        return cellViewOld;
-    }
-
-    CellView cellViewOld;
-CellView cellView;
-    CellView cellView1;
-
-    public CellView getCellView() throws RemoteException {
-        return cellView;
-    }
-
     static ControllerServerInterface controller;
     List<Cell> borderCells;
     int numberTIck = 1;
     static
     PlayerInterface playerInterface;
+    public static List<CellView> blackButtons;
+    private List<CellView> whiteButtons;
+    ChekersView chekersView;
+    CellView cellViewOld;
+    CellView cellView;
+    CellView cellView1;
 
     public List<CellView> getBlackButtons() {
         return blackButtons;
 
+    }
+
+    public void setCellView1(CellView cellView1) {
+        this.cellView1 = cellView1;
     }
 
     public void setCellView(CellView cellView) {
@@ -65,9 +51,17 @@ CellView cellView;
 
     }
 
-    public void setCellViewOld(CellView cellViewOld) {
-        this.cellViewOld = cellViewOld;
-
+    public void updateBOard() throws RemoteException {
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(8, 8));
+        mainPanel.repaint();
+        controller.startAddPlayer();
+        board.getButtons();
+        controller.setPlayerAlghoritm();
+        board.setPositionButtons();
+        board.setChekers();
+        board.setListenerForCells();
+        MainFrame mainFrame = new MainFrame(board);
     }
 
     public static void main(String[] args) throws RemoteException {
@@ -75,71 +69,78 @@ CellView cellView;
 
         board = new Board();
         try {
+
             Registry registry = LocateRegistry.getRegistry(null, 12345);
             controller = (ControllerServerInterface) registry.lookup("Server");
             playerInterface = (PlayerInterface) UnicastRemoteObject.exportObject(board, 0);
             controller.register(playerInterface);
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridLayout(8, 8));
-            controller.go();
+            controller.startAddPlayer();
             board.getButtons();
-            controller.go1();
+            controller.setPlayerAlghoritm();
             board.setPositionButtons();
-
             board.setChekers();
             board.setListenerForCells();
-
             MainFrame mainFrame = new MainFrame(board);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void deleteBoard() throws RemoteException {
+        controller.deletePlayer(playerInterface);
+    }
+
     public Board() throws RemoteException {
-        this.controller = controller;
 
     }
 
-
-    public char getXNowAdress(){
+    public char getXNowAdress() {
         return cellView.getXAdress();
     }
-    public int getYNowAdress(){
+
+    public int getYNowAdress() {
         return cellView.getYAdress();
     }
-    public char getCellView1X(){
+
+    public char getCellView1X() {
         return cellView1.getXAdress();
     }
+
     public int getCellView1Y() {
         return cellView1.getYAdress();
     }
-    public char getXOldAdress(){
+
+    public char getXOldAdress() {
         return cellViewOld.getXAdress();
     }
-    public int getYOldAdress(){
+
+    public int getYOldAdress() {
         return cellViewOld.getYAdress();
     }
-    public void setChekersView(char xAdress,int yAdress, char oldXAdress, int oldYAdress, char oneXAdress, int oneYAdress) throws RemoteException{
-        for (CellView cell : blackButtons){
-            if(cell.getXAdress() == xAdress && cell.getYAdress() == yAdress){
+
+    public void setChekersView(char xAdress, int yAdress, char oldXAdress, int oldYAdress, char oneXAdress, int oneYAdress) throws RemoteException {
+        for (CellView cell : blackButtons) {
+            if (cell.getXAdress() == xAdress && cell.getYAdress() == yAdress) {
                 this.cellView = cell;
             }
-            if(cell.getXAdress() == oldXAdress && cell.getYAdress() == oldYAdress){
+            if (cell.getXAdress() == oldXAdress && cell.getYAdress() == oldYAdress) {
                 this.cellViewOld = cell;
             }
-            if(cell.getXAdress() == oneXAdress && cell.getYAdress() == oneYAdress){
+            if (cell.getXAdress() == oneXAdress && cell.getYAdress() == oneYAdress) {
                 this.cellView1 = cell;
             }
         }
-        if(!controller.getBooleanBear()) {
+        if (!controller.getBooleanBear()) {
             this.cellViewOld.setColorCell(0);
             this.cellViewOld.remove(this.cellViewOld.getChekersView());
             this.cellViewOld.repaint();
             this.cellView.setChekersView(this.cellViewOld.getChekersView());
             cellView.repaint();
             this.cellView.setColorCell(controller.getNumberPlayerInModel());
-        }
-        else {
+        } else {
             cellViewOld.setColorCell(0);
             controller.getBearCellsController().get(0).setColorCell(0);
             cellViewOld.remove(cellViewOld.getChekersView());
@@ -153,7 +154,7 @@ CellView cellView;
     }
 
     public void setListenerForCells() throws RemoteException {
-
+        JLabel label = new JLabel("Не ваш ход");
         for (CellView cellView : blackButtons) {
             cellView.addMouseListener(new MouseAdapter() {
                 @Override
@@ -384,7 +385,6 @@ CellView cellView;
         }
         return horizontalNumbPanel;
     }
-
 
     public JPanel getMainPanel() throws RemoteException {
         return mainPanel;

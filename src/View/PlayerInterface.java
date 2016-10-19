@@ -17,10 +17,7 @@ import java.util.List;
  * Created by Igor on 12.10.2016.
  */
 public interface PlayerInterface extends Remote  {
-    public  List<CellView> getBlackButtons() throws RemoteException;
-    public CellView getCellView() throws RemoteException;
-    public void setCellViewOld(CellView cellViewOld) throws RemoteException;
-    public CellView getCellViewOld() throws RemoteException;
+    public void updateBOard() throws RemoteException;
     public void setListenerForCells() throws RemoteException;
     public char getXNowAdress() throws RemoteException;
     public int getYNowAdress() throws RemoteException;

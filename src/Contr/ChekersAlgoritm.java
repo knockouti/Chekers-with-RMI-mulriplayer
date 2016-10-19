@@ -14,16 +14,10 @@ public class ChekersAlgoritm implements Serializable {
     private List<Cell> blackButtons;
     public static final int SIZE_STRING = 8;
     public static final int SIZE_BUTTONS = 32;
-    public static final char START_STRING = 'a';
-    public static final char END_STRING = 'h';
     public int countX = 0;
     public int countY = 0;
     public int size = 0;
     public Cell currentCell;
-
-    public ChekersAlgoritm getChekers() {
-        return this;
-    }
 
     public List<Cell> getEightWay() {
         return eightWay;
@@ -42,12 +36,10 @@ public class ChekersAlgoritm implements Serializable {
     private List<Cell> fourWayE1H4; //e1, f2, g3, h4
     private List<Cell> twoWayG1H2; //g1, h2
     private List<Cell> twoWayA7B8; //g1, h2
-    //    private int numberPlayer = 1;
     private List<Cell> bearCell;
     private List<Cell> borderCells;
     private List<List<Cell>> diagonalsWithCurrent;
     private boolean beat;
-    List<Player> listPlayers;
     Player player;
     Player player1;
     Player player2;
@@ -59,48 +51,37 @@ public class ChekersAlgoritm implements Serializable {
         return player;
     }
 
-    public ChekersAlgoritm() {
 
-    }
-
-    public void setPlayersList(ArrayList<PlayerInterface> playerInterfaces) {
-        this.playerInterfaces = playerInterfaces;
-        setPlayerAndCurrentPlayer();
-    }
 
     public PlayerInterface getPlayerInterfaceNow() {
         return playerInterfaceNow;
     }
 
     public void setPlayerAndCurrentPlayer() {
-        if(player == null) {
-           player = new Player();
+        if (player == null) {
+            player = new Player();
             playersList = new ArrayList<>(2);
         }
-    if(player1 == null) {
-        player1 = new Player();
-        playersList.add(player1);
-    }
-    if (player2 == null){
-        player2 = new Player();
-        playersList.add(player2);
-    }
+        if (player1 == null) {
+            player1 = new Player();
+            playersList.add(player1);
+        }
+        if (player2 == null ) {
+            player2 = new Player();
+            playersList.add(player2);
+        }
 
 
-
-if(playersList.size() == 2) {
-    playerInterfaceNow = playerInterfaces.get(0);
-    player.setPlayerInterfaces(playerInterfaces, playerInterfaceNow);
-}
+        if (playersList.size() == 2) {
+            playerInterfaceNow = playerInterfaces.get(0);
+            player.setPlayerInterfaces(playerInterfaces, playerInterfaceNow);
+        }
     }
 
     public ChekersAlgoritm(List<PlayerInterface> playerInterfaces) {
         this.playerInterfaces = playerInterfaces;
 
         setPlayerAndCurrentPlayer();
-//        listPlayers = new ArrayList<>(2);
-//        listPlayers.add(playerInterfaceNow);
-//        listPlayers.add(player2);
 
         blackButtons = new ArrayList<>();
         eightWay = new ArrayList<>();
@@ -169,17 +150,6 @@ if(playersList.size() == 2) {
 
     }
 
-    public void setListBorderCells(List<Cell> borderCells) {
-        this.borderCells = borderCells;
-    }
-
-    public int getNumberPlayer() {
-        return player.getIdentifier();
-    }
-
-    public void setBearCell(List<Cell> bearCell) {
-        this.bearCell = bearCell;
-    }
 
     public boolean isBeat() {
 
@@ -234,22 +204,15 @@ if(playersList.size() == 2) {
         }
     }
 
-//    public int getOppositeNumerPlayer() {
-//        if (numberPlayer == 1) {
-//            return numberPlayer + 1;
-//        } else {
-//            return numberPlayer - 1;
-//        }
-//    }
 
     public void changeDiagonalPlayer1(char countX, int countY, char oldCountX, int oldCountY) throws RemoteException {
-        for(PlayerInterface playerInterface : playerInterfaces){
-            if(playerInterfaceNow != playerInterface){
-                if(isBeat())
-                playerInterface.setChekersView(playerInterfaceNow.getXNowAdress(), playerInterfaceNow.getYNowAdress(),playerInterfaceNow.getXOldAdress(),playerInterfaceNow.getYOldAdress(),
-                        playerInterfaceNow.getCellView1X(), playerInterfaceNow.getCellView1Y());
+        for (PlayerInterface playerInterface : playerInterfaces) {
+            if (playerInterfaceNow != playerInterface) {
+                if (isBeat())
+                    playerInterface.setChekersView(playerInterfaceNow.getXNowAdress(), playerInterfaceNow.getYNowAdress(), playerInterfaceNow.getXOldAdress(), playerInterfaceNow.getYOldAdress(),
+                            playerInterfaceNow.getCellView1X(), playerInterfaceNow.getCellView1Y());
                 else {
-                    playerInterface.setChekersView(playerInterfaceNow.getXNowAdress(), playerInterfaceNow.getYNowAdress(),playerInterfaceNow.getXOldAdress(),playerInterfaceNow.getYOldAdress(),'p', -1);
+                    playerInterface.setChekersView(playerInterfaceNow.getXNowAdress(), playerInterfaceNow.getYNowAdress(), playerInterfaceNow.getXOldAdress(), playerInterfaceNow.getYOldAdress(), 'p', -1);
                 }
             }
         }
@@ -262,10 +225,12 @@ if(playersList.size() == 2) {
         }
         if (player.getIdentifier() == 1) {
             playerInterfaceNow = playerInterfaces.get(1);
-            player.setIdentifier(2);
+            player = player2;
+            player.setIdentifier(player1,player2);
         } else {
             playerInterfaceNow = playerInterfaces.get(0);
-            player.setIdentifier(1);
+          player = player1;
+            player.setIdentifier(player1, player2);
         }
 
         setEmptyCellInDiagonal(oldCountX, oldCountY);
@@ -446,7 +411,6 @@ if(playersList.size() == 2) {
         }
         this.addWayToList(list, 3, 4);
     }
-
 
     public void setTwoWay(int chooseList, List<Cell> list) {
         if (chooseList == 1) {

@@ -12,20 +12,32 @@ import java.util.List;
 /**
  * Created by Igor on 20.09.2016.
  */
-public class Controller implements ControllerServerInterface{
+public class Controller implements ControllerServerInterface {
     ChekersAlgoritm chekersAlgoritm;
-
-    Player player;
     List<PlayerInterface> playerInterfacesList = new ArrayList<>(2);
-    public PlayerInterface getPlayerINterfaceNow(){
-        return  chekersAlgoritm.getPlayerInterfaceNow();
+
+    public PlayerInterface getPlayerINterfaceNow() {
+        return chekersAlgoritm.getPlayerInterfaceNow();
     }
-    public List<PlayerInterface> getPlayerInterfacesList(){
-        return playerInterfacesList;
-    }
-    public void go() {
-      chekersAlgoritm = new ChekersAlgoritm(playerInterfacesList);
+
+
+    public void startAddPlayer() {
+        chekersAlgoritm = new ChekersAlgoritm(playerInterfacesList);
         chekersAlgoritm.setPlayerAndCurrentPlayer();
+    }
+    public void deletePlayer(PlayerInterface deletePlayer) throws RemoteException {
+        for(PlayerInterface playerInterface : playerInterfacesList){
+           if(playerInterface.equals(deletePlayer)){
+               playerInterfacesList.remove(playerInterface);
+
+           }
+            if(!playerInterface.equals(deletePlayer)){
+                playerInterface.updateBOard();
+            }
+
+
+
+        }
     }
 
     @Override
@@ -33,8 +45,7 @@ public class Controller implements ControllerServerInterface{
         playerInterfacesList.add(playerInterface);
     }
 
-
-    public void go1() {
+    public void setPlayerAlghoritm() {
         chekersAlgoritm.setEightWay();
         chekersAlgoritm.setSevenWay(1, chekersAlgoritm.getSevenWayG1A7());
         chekersAlgoritm.setSevenWay(2, chekersAlgoritm.getSevenWayH2B8());
@@ -66,30 +77,6 @@ public class Controller implements ControllerServerInterface{
 
     }
 
-    //    public void startSearch () {
-//        while (true) {
-//            try {
-//                final PrimeChecker checker = availableCheckers.take();
-//                final BigDecimal numberToCkeck = increment();
-//
-//                new Thread(new Runnable () {
-//                    public void run () {
-//                        try {
-//                            if (checker.check(numberToCkeck)) {
-//                                System.out.println (numberToCkeck);
-//                            }
-//                            availableCheckers.add (checker);
-//                        } catch (RemoteException e) {
-//                            System.out.println ("Client disconnected or unknown error occured");
-//                        }
-//                    }
-//                }).start();
-//
-//            } catch (InterruptedException e) {
-//
-//            }
-//        }
-//    }
     public void setBooleanBear(boolean booleanBear) {
         chekersAlgoritm.setBeat(booleanBear);
     }

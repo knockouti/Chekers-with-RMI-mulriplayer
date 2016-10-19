@@ -12,22 +12,18 @@ import java.net.URL;
  */
 public class ChekersView extends JPanel implements Serializable {
 
-    BufferedImage image;
-    BufferedImage imageRedCheker;
+    private BufferedImage image;
     JLabel labelImage;
-
-
-
 
     public ChekersView(Color color)  {
         super();
 
         try {
             if(color == Color.red) {
-                image= ImageIO.read(new File("src\\redd.png"));
+                image= ImageIO.read(new File("src\\images\\redd.png"));
             }
             if(color == Color.white){
-                image = ImageIO.read(new File("src\\whitee.png"));
+                image = ImageIO.read(new File("src\\images\\whitee.png"));
             }
         }
         catch (IOException ex){

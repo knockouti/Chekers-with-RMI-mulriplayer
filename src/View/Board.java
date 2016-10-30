@@ -1,8 +1,6 @@
 package View;
-
 import Contr.*;
 import Contr.Cell;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;

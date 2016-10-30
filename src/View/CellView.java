@@ -15,7 +15,6 @@ public class CellView extends JPanel implements Serializable {
     ChekersView chekersView;
     int color;
 
-
     public ChekersView getChekersView() {
         return chekersView;
     }
@@ -57,7 +56,6 @@ public class CellView extends JPanel implements Serializable {
 
     }
 
-
     public CellView(int yAdress, char xAdress) {
         super();
         this.xAdress = xAdress;
@@ -66,7 +64,6 @@ public class CellView extends JPanel implements Serializable {
         this.setPreferredSize(new Dimension(100, 100));
 
     }
-
 
     public char getXAdress() {
         return xAdress;
